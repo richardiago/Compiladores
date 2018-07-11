@@ -2,10 +2,9 @@
   #include <stdio.h>
   #include <string.h>
 
-  char lpr[13][10] = {"and", "break", "continue", "def", "if", "elif", "else", "not", "print", "while", "in", "return", "import"};
-  /*char ls[20][2] = {'.', ',', ':', '[', ']', '(', ')', '{', '}', '<', '>', '<=', '>=', '=', '==', '!=', '+','-','*','/'};*/
+  char lpr[13][10] = {"define", "imprime", "cria", "se", "senao", "retorna", "tamanho", "enquanto", "interrompa"};
+  enum pr {define, imprime, cria, se, senao, retorna, tamanho, enquanto, interrompa};
   int palavra_reservada (char pal[]);
-
 
   #define S_PF 1
   #define S_V 2
@@ -178,11 +177,28 @@ const char *getString (int codigo)
 
 int main()
 {
+  FILE *fp1, *fp2;
+	char nomeArquivo[50];
+	scanf("%s", nomeArquivo);
+	fp1 = fopen(nomeArquivo, "r");
+  fp2 = fopen("saida.txt", "w");
+
+  if(fp1 == NULL || fp2 == NULL )
+  {
+     printf("Erro na abertura/criação do arquivo!");
+     return 1;
+  }
+
+	yyin = fp1;
   int codigo;
 
 	while (codigo = yylex()){
 		printf("%s - %s\n", yytext, getString(codigo));
+    fprintf(fp2, "%s - %s\n", yytext, getString(codigo));
 	}
+
+  fclose(fp1);
+  fclose(fp2);
 
   return 0;
 }
