@@ -32,46 +32,53 @@
 
 %}
 
-digito  [0-9]
-letra   [a-zA-Z]
-id      {letra}({letra}|{digito})*
-inteiro {digito}+
+digito    [0-9]
+alfa      [a-zA-Z]
+alfa_exp  [_áéíóúàèìòùãẽĩõũäëïöüç]
+letra     {alfa}|{alfa_exp}
+id        {letra}({letra}|{digito})*
+inteiro   {digito}+
+real      {digito}*[.]{digito}+
+espaco    [ \t]     
+palavra   \"({letra}|{digito}|{espaco})*\"
 
 
 %%
-[ \t\n]     ;    {/*espaços em branco*/}
-\#.*\n      ;    {/*comentarios*/}
-{id}        {if (palavra_reservada(yytext))
-                return (S_PR);
-            else
-                return (S_ID);
-            }
+{espaco}      ;    {/*espaços em branco*/}
+\#.*\n        ;    {/*comentarios*/}
 
-{inteiro}   printf("%s - %s\n", yytext, "NUM_INT");
+{id}          {if (palavra_reservada(yytext))
+                  return (S_PR);
+              else
+                  return (S_ID);
+              }
 
-"."         return (S_PF);
-","         return (S_V);
-":"         return (S_DP);
-"["         return (S_ACO);
-"]"         return (S_FCO);
-"("         return (S_AP);
-")"         return (S_FP);
-"{"         return (S_ACH);
-"}"         return (S_FCH);
-"<"         return (S_MENOR);
-">"         return (S_MAIOR);
-"<="        return (S_MENOR_IGUAL);
-">="        return (S_MAIOR_IGUAL);
-"="         return (S_IGUAL);
-"=="        return (S_COMP);
-"!="        return (S_DIF);
-"+"         return (S_SOMA);
-"-"         return (S_SUB);
-"*"         return (S_MULT);
-"/"         return (S_DIV);
-";"         return (S_PV);
+{real}        printf("%s - %s\n", yytext, "NUM_REAL");
+{inteiro}     printf("%s - %s\n", yytext, "NUM_INT");
 
+"."           return (S_PF);
+","           return (S_V);
+":"           return (S_DP);
+"["           return (S_ACO);
+"]"           return (S_FCO);
+"("           return (S_AP);
+")"           return (S_FP);
+"{"           return (S_ACH);
+"}"           return (S_FCH);
+"<"           return (S_MENOR);
+">"           return (S_MAIOR);
+("<="|"≤")    return (S_MENOR_IGUAL);
+(">="|"≥")    return (S_MAIOR_IGUAL);
+"="           return (S_IGUAL);
+"=="          return (S_COMP);
+("!="|"≠")    return (S_DIF);
+"+"           return (S_SOMA);
+"-"           return (S_SUB);
+("*"|"·"|"×") return (S_MULT);
+("/"|"÷")     return (S_DIV);
+";"           return (S_PV);
 
+. fprintf(stderr, "Sem Captura: %s\n", yytext);
 %%
 int palavra_reservada (char pal[])
 {
@@ -91,108 +98,95 @@ const char *getString (int codigo)
 
 		case S_PF:
 			return ".";
-			break;
 
 		case S_V:
 			return ",";
-			break;
 
 		case S_DP:
 			return ":";
-			break;
 
     case S_ACO:
       return "[";
-      break;
 
     case S_FCO:
       return "]";
-      break;
 
     case S_AP:
       return "(";
-      break;
 
     case S_FP:
       return ")";
-      break;
 
     case S_ACH:
       return "{";
-      break;
 
     case S_MENOR:
       return "<";
-      break;
 
     case S_MAIOR:
       return ">";
-      break;
 
     case S_MENOR_IGUAL:
       return "<=";
-      break;
 
     case S_MAIOR_IGUAL:
       return ">=";
-      break;
 
     case S_IGUAL:
       return "=";
-      break;
 
     case S_COMP:
       return "==";
-      break;
 
     case S_DIF:
       return "!=";
-      break;
 
     case S_SOMA:
       return "+";
-      break;
 
     case S_SUB:
       return "-";
-      break;
 
     case S_MULT:
       return "*";
-      break;
 
     case S_DIV:
       return "/";
-      break;
 
     case S_ID:
       return "ID";
-      break;
+
+    case S_PR:
+      return "PR";
 
 		default:
+      //printf("INVALIDO: %d\n", codigo);
 			return "INVALIDO";
 
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
   FILE *fp1, *fp2;
-	char nomeArquivo[50];
-	scanf("%s", nomeArquivo);
-	fp1 = fopen(nomeArquivo, "r");
+  if(argc != 2){
+    printf("usage: analisador file");
+    return 1;
+  }
+
+	fp1 = fopen(argv[1], "r");
   fp2 = fopen("saida.txt", "w");
 
   if(fp1 == NULL || fp2 == NULL )
   {
-     printf("Erro na abertura/criação do arquivo!");
+     fprintf(stderr, "Erro na abertura/criação do arquivo!");
      return 1;
   }
 
 	yyin = fp1;
   int codigo;
 
-	while (codigo = yylex()){
+	while ((codigo = yylex())){
 		printf("%s - %s\n", yytext, getString(codigo));
     fprintf(fp2, "%s - %s\n", yytext, getString(codigo));
 	}
