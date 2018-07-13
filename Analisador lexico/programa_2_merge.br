@@ -1,0 +1,33 @@
+
+define Combina A, inicio, meio, fim
+	cria n1 = m-inicio + 1
+	cria n2 = fim - m
+
+	cria E = [1..n1+1]
+	cria D = [1..n2+1]
+
+	E[n1+1] = int.infinito
+	D[n2+1] = int.infinito
+
+	para i = 1 até n1
+		E[i] = A[j+inicio-1]
+	
+	para j = 1 até n2
+		D[j] = A[meio+j]
+
+	cria i, j
+	i = 1, j = 1
+	para k = inicio até fim
+		se E[i] <= D[j]
+			A[k] = E[i]
+			i++
+		se não
+			A[k] = D[j]
+			j++
+
+define MergeSorts A, inicio, fim
+	se inicio < fim
+		cria meio = piso( (i+f)/2 )
+		MergeSort(A, i, meio)
+		MergeSort(A, meio+1, f)
+		Combina(A, i, meio, f)
