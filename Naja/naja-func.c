@@ -3,10 +3,6 @@
  */
 #include "naja.h"
 
-/* Globais */
-var *true;
-var *false;
-
 #ifdef DEBUG
 #define debug(str)	printf(" ::: %s ::: \n", str);
 #else

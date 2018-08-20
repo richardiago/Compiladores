@@ -48,7 +48,7 @@
 %start calclist
 %%
 
-stmt	 : RET exp IF exp EOL {$$ = newflow('I', $4, newast('R', $2, NULL), NULL); }
+stmt	 : stmt IF exp EOL {$$ = newflow('I', $3, $1, NULL); }
 		 | IF exp THEN list END { $$ = newflow('I', $2, $4, NULL); }
 		 | IF exp EOL list END { $$ = newflow('I', $2, $4, NULL); }
 		 | IF exp THEN list ELSE THEN list END { $$ = newflow('I', $2, $4, $7); }
