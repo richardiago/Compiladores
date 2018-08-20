@@ -1,0 +1,27 @@
+
+seja primo(n)
+	se n ≤ 1 então retorne FALSO fim
+	// 'se' em uma linha pode ser simplificado:
+	retorne VERDADEIRO se n ≤ 3
+
+	se n % 2 == 0 ou n % 3 == 0 então retorne FALSO fim
+
+	i = 5
+	enquanto i² ≤ n
+		se n % i == 0 ou n % (i + 2) == 0 
+			retorne FALSO
+		fim
+
+		i += 6
+	fim
+
+	retorne VERDADEIRO
+fim
+
+imprima("primo("+ 1 + "): " + primo( 1)) // F
+imprima("primo("+ 2 + "): " + primo( 2)) // V
+imprima("primo("+ 3 + "): " + primo( 3)) // V
+imprima("primo("+ 4 + "): " + primo( 4)) // F
+imprima("primo("+ 5 + "): " + primo( 5)) // V
+imprima("primo("+ 6 + "): " + primo( 6)) // F
+imprima("primo("+97 + "): " + primo(97)) // V

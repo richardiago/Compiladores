@@ -1,0 +1,58 @@
+
+imprima(1)
+imprima(VERDADEIRO)
+imprima("Hello")
+
+imprima("+++++++++++")
+imprima(5+2)
+imprima(5+VERDADEIRO)
+imprima(5+", Hello")
+
+imprima("+++++++++++")
+imprima(FALSO+2)
+imprima(FALSO+VERDADEIRO)
+imprima(FALSO+", Hello")
+
+imprima("+++++++++++")
+imprima("Hello "+2)
+imprima("Hello "+VERDADEIRO)
+imprima("Hello "+"World!")
+
+imprima("--------------")
+imprima(5-2)
+imprima("Hello"-2)
+imprima("Hello"-"Mello")
+
+imprima("************")
+imprima(5*2)
+imprima(5*VERDADEIRO)
+imprima(5*FALSO)
+imprima(VERDADEIRO*5)
+imprima(FALSO*5)
+imprima(VERDADEIRO*VERDADEIRO)
+imprima(FALSO*VERDADEIRO)
+imprima("Hello "*5)
+imprima(3*" World!")
+
+imprima("//////////////")
+imprima(5/2)
+imprima(2/5)
+imprima("Divida"/2)
+
+imprima("-------------")
+imprima(-5)
+imprima(-VERDADEIRO)
+imprima(-FALSO)
+imprima(-"Hello")
+
+imprima("??????????????")
+imprima(5==5)
+imprima(VERDADEIRO==VERDADEIRO)
+imprima("Hello"=="Hello")
+imprima(5==6)
+imprima(VERDADEIRO==FALSO)
+imprima("Hello"=="World")
+
+imprima("..........")
+imprima("Hello " + VERDADEIRO)
+

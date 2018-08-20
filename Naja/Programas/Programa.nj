@@ -1,0 +1,70 @@
+
+imprima(½) // 0.5
+
+imprima(5*½) // 2.5
+
+imprima(¾+¼) // 1
+
+imprima(⅜+⅞) // 1.25
+
+a = 100 / 0 // Divisão por Zero
+
+c = 1 + b // Variável não inicializada
+
+imprima(pot(2, 3)) // 8
+imprima(pot(2, 4)) // 16
+imprima(2^5)       // 32
+imprima(2^6)	   // 64
+
+x = 3²
+y = 3³
+
+// 'retorne' é opcional, por padrão a função
+// retorna o ultimo valor atingido
+seja max(x,y) 
+	se x≤y 
+		y
+	senão
+		x
+	fim
+fim
+
+imprima(max(x, y)) // 27
+
+seja num(x)
+	4
+fim
+
+// A macro 'verbose' imprime cada comando
+#verbose
+se x≤y então 1; 2; 3; 4; 5; senão então 6; 7; 8; 9; 10; fim
+#verbose
+
+min(10,20) // Função indefinida
+max(1) // Poucos parâmetros
+
+// Você pode sequenciar comandos com ';'
+se x≥y 
+ 1; 2; 3
+ 4
+ 5
+senão
+ 6
+ 7
+ 8
+ 9
+ 10
+fim
+
+
+i = 20
+enquanto i < 30
+	imprima(i)
+	i = i + 1
+fim
+
+// Os comandos 'então' e 'faça' permitem continuar
+// respectivamente, um comando 'se' e 'enquanto'
+// na mesma linha
+i = 100
+enquanto i<110 faça imprima(i); i = i + 1; fim

@@ -1,0 +1,13 @@
+"WELLCOME!"
+a = 10
+imprima(a)
+b = 20
+imprima("A")
+
+se a > b
+	c = a
+senão
+	c = b
+fim
+
+imprima(c)

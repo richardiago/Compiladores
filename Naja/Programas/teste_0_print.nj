@@ -1,0 +1,10 @@
+
+// A função 'imprima' pode receber diferentes tipos
+imprima(5)
+
+imprima(VERDADEIRO)
+
+imprima("HELLO WORLD!")
+
+imprima(FALSO)
+
