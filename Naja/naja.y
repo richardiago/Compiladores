@@ -29,6 +29,7 @@
 %token <fn> FUNC
 %token <str> STRING
 %token <fn> TRUE FALSE
+%token THREAD JOIN
 
 %token IF THEN ELSE WHILE DO LET END RET
 
@@ -94,6 +95,8 @@ exp		 :exp CMP exp {$$ = newcmp($2, $1, $3); }
 		 |NAME MODATR exp 		{$$ = newasgn($1, newast('%', newref($1), $3)); }
 		 |NAME '=' exp 			{$$ = newasgn($1, $3); }
 		 |NAME 					{$$ = newref($1); }
+		 |THREAD FUNC '(' explist ')'	{$$ = newthread(newfunc($2, $4)); }
+		 |THREAD NAME '(' explist ')'	{$$ = newthread(newcall($2, $4)); }
 		 |FUNC '(' explist ')'	{$$ = newfunc($1, $3); }
 		 |NAME '(' explist ')'	{$$ = newcall($1, $3); }
 		 |TRUE 					{$$ = newboolean(1);}
@@ -111,8 +114,9 @@ calclist : /* vazio */
 		 | calclist macro EOL {}
 		 | calclist stmt EOL {
 		 	init_validation($2);
-		 	treefree($2);
+		 	//treefree($2);
 		 }
+		 | calclist JOIN EOL {jointhreads();}
 		 | calclist LET NAME '(' symlist ')' EOL list END {
 		 	dodef($3, $5, $8);
 		 	//printf("Função Definida: %s\n> ", $3->name);

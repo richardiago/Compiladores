@@ -56,6 +56,8 @@ string \"(\\.|[^"\\])*\"
 "FALSO" {return FALSE;}
 
  /* Funções Nativas */
+"thread"	{return THREAD;}
+"join"		{return JOIN;}
 "raiz"		{ yylval.fn = B_sqrt;  return FUNC; }
 "exp"		{ yylval.fn = B_exp;   return FUNC; }
 "log"		{ yylval.fn = B_log;   return FUNC; }

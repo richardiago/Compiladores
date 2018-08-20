@@ -1,0 +1,21 @@
+
+
+seja foo(n)
+	i = 0
+	enquanto i ≤ n
+		imprima("Foo: " + i)
+		i++
+	fim
+fim
+
+seja bar(m)
+	j = m
+	enquanto j ≥ 0
+		imprima("Bar: " + j)
+		j--
+	fim
+fim
+
+thread foo(5)
+thread bar(5)
+join

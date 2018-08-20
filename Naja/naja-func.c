@@ -127,6 +127,21 @@ newcmp(int cmptype, struct ast *l, struct ast *r){
 	a->r = r;
 	return a;
 }
+/* Thread na AST */
+struct ast *
+newthread(struct ast* s){
+	debug("newfunc");
+	assert(s != NULL);
+	struct ast *a = malloc(sizeof(struct ast));
+	if(!a){
+		yyerror("Sem espaço de memória.");
+		exit(0);
+	}
+	a->nodetype = 'T';
+	a->l = s;
+	return (struct ast *)a;
+}
+
 /* Funções na AST */
 struct ast *
 newfunc(int functype, struct ast *l){
@@ -224,10 +239,10 @@ treefree(struct ast *a){
 			treefree(a->r);
 		/* Uma Sub-Arvore */
 		case '|':
-		case 'M': case 'C': case 'F':
+		case 'M': case 'C': case 'F': case 'T':
 			treefree(a->l);
 		/* Sem Sub-Arvore */
-		case 'K': case 'N':
+		case 'K': case 'N': case 'J': 
 			break;
 		case '=':
 			free( ((struct symasgn *)a)->v);
@@ -239,7 +254,7 @@ treefree(struct ast *a){
 			if( ((struct flow *)a)->el ) treefree( ((struct flow*)a)->el);
 			break;
 		default:
-			printf("Erro Interno: Erro na Operação Free %c\n", a->nodetype);
+			printf("Erro Interno: Erro na Operação Free (%c)\n", a->nodetype);
 	}
 	free(a);// Sempre limpa o proprio nó
 }
@@ -271,17 +286,47 @@ symlistfree(struct symlist *sl){
 	}
 }
 
+/* Theads */
+pthread_t* threads[1024];
+
+void prepare_treads(){
+	for(int i=0; i<1024; i++){
+		threads[i] = NULL;
+	}
+}
+
+void addthead(pthread_t *p){
+	for(int i=0; i<1024; i++){
+		if(threads[i] == NULL){
+			threads[i] = p;
+		}
+	}
+}
+
+void jointhreads(){
+	for(int i=0; i<1024; i++){
+		if(threads[i] != NULL){
+			pthread_join(*threads[i], NULL);
+			//printf("Fim da Thread (%d)\n", i);
+			//free(threads[i]);
+			threads[i] = NULL;
+		}
+	}
+}
+
 /* Validação a partir de um nó AST */
 static var* callbuiltin(struct fncall *);
 static var* calluser(struct ufncall *);
 static short to_boolean(var *v);
 
 void init_validation(struct ast *n){
+	prepare_treads();
 	if(_M_VERBOSE){
 		printval("= %v\n> ", eval(n));
 	}else{
 		eval(n);
 	}
+	
 }
 
 short RETURNED = 0;
@@ -374,6 +419,13 @@ eval(struct ast *a){
 				RETURNED = 0;
 			}
 			break;
+		case 'T':
+			;
+			pthread_t *pth = (pthread_t*)malloc(sizeof(pthread_t));
+    		pthread_create(pth, NULL, (void *)eval, (void *)a->l);
+    		addthead(pth);
+			v_bool(v, 1); // Valor padrão
+			break;
 		case 'F': v = callbuiltin((struct fncall *)a); break;
 		case 'C': v = calluser((struct ufncall *)a); break;
 		case 'R': 
@@ -385,6 +437,12 @@ eval(struct ast *a){
 	}
 	assert(v != NULL);
 	return v;
+}
+
+void *
+eval_thread(void *a){
+	struct ast t = *((struct ast*)a);
+	eval(&t);
 }
 
 /* Validação de Funções Nativas */

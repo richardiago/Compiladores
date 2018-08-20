@@ -4,6 +4,7 @@
 #pragma once
 #include <assert.h>
 #include <stdio.h>
+#include <pthread.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -73,6 +74,8 @@ void symlistfree(struct symlist *sl);
  * S lista de simbolos
  * F chamada de função nativa
  * C chamada de função do usuário
+ * T Thread
+ * J Join
  */
 /* Funções Nativas */
 enum bifs {
@@ -129,6 +132,11 @@ struct symasgn{
 /* Tratamento de Macros */
 void callmacro(struct symbol *s);
 
+/* Threads */
+void prepare_treads();
+void addthead(pthread_t *p);
+void jointhreads();
+
 /* Constroi uma AST */
 struct ast *newast(int nodetype, struct ast *l, struct ast *r);
 struct ast *newcmp(int cmptype, struct ast *l, struct ast *r);
@@ -137,6 +145,8 @@ struct ast *newcall(struct symbol *s, struct ast *l);
 struct ast *newref(struct symbol *s);
 struct ast *newasgn(struct symbol *s, struct ast *v);
 struct ast *newflow(int nodetype, struct ast *cond, struct ast *tl, struct ast *tr);
+struct ast *newthread(struct ast* s);
+struct ast *newjoin();
 
 struct ast *newvalue(data_type dt, data_value dv);
 struct ast *newnumber(double val);

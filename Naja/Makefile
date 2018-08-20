@@ -1,5 +1,6 @@
 NAME = naja
-PROG = Programas/teste_1_primo.nj
+#PROG = Programas/teste_1_primo.nj
+PROG = Programas/teste_1_threads.nj
 
 all: bison flex gcc run
 
@@ -13,7 +14,7 @@ flex:
 
 gcc:
 	@echo "--- GCC --- "
-	gcc -o exe $(NAME).tab.c $(NAME).lex.c $(NAME)-func.c -lfl -lm
+	gcc -o exe $(NAME).tab.c $(NAME).lex.c $(NAME)-func.c -lfl -lm -lpthread
 
 run:
 	@echo "--- RUN --- "
